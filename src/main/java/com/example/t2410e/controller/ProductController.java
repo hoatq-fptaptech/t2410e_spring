@@ -1,6 +1,9 @@
 package com.example.t2410e.controller;
 
+import com.example.t2410e.common.ResponseHandler;
+import com.example.t2410e.dto.common.ResponseDTO;
 import com.example.t2410e.entity.Product;
+import com.example.t2410e.enums.StatusCode;
 import com.example.t2410e.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +21,16 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Product>> search(
+    public ResponseEntity<ResponseDTO<List<Product>>> search(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice
     ){
         try {
-            return ResponseEntity.ok(productService.filter(name,minPrice,maxPrice));
+            return ResponseHandler.success(productService.filter(name,minPrice,maxPrice)
+                    ,"Ê đã thấy sản phẩm....");
         }catch (Exception e){
-            return ResponseEntity.ofNullable(null);
+            return ResponseHandler.error(StatusCode.BAD_REQUEST,e.getMessage());
         }
     }
 
