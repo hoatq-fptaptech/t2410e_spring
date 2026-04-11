@@ -2,6 +2,7 @@ package com.example.t2410e.controller;
 
 import com.example.t2410e.common.ResponseHandler;
 import com.example.t2410e.dto.common.ResponseDTO;
+import com.example.t2410e.dto.product.ProductResponse;
 import com.example.t2410e.entity.Product;
 import com.example.t2410e.enums.StatusCode;
 import com.example.t2410e.service.ProductService;
@@ -21,7 +22,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/filter")
-    public ResponseEntity<ResponseDTO<List<Product>>> search(
+    public ResponseEntity<ResponseDTO<List<ProductResponse>>> search(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice
