@@ -18,13 +18,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @AllArgsConstructor
 public class ApplicationConfiguration {
-    private final AuthenticationProvider authenticationProvider;
+//    private final AuthenticationProvider authenticationProvider;
     private final UserRepository userRepository;
 
     @Bean
@@ -68,6 +71,19 @@ public class ApplicationConfiguration {
                 );
         return http.build();
 
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.addAllowedHeader("*"); // content-type: application/json ...
+        cfg.addAllowedMethod("*"); // "GET POST PUT..
+        cfg.addAllowedOrigin("*"); // http://abc.com
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/v1/**",cfg);
+//        source.registerCorsConfiguration("/api/v2/**",cfg);
+//        source.registerCorsConfiguration("/api/v3/**",cfg);
+        return source;
     }
 
 }
