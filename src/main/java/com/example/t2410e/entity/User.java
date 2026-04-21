@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -21,10 +24,17 @@ public class User implements UserDetails {
     private String fullName;
     private String email;
     private String password;
-
+    @ManyToMany(targetEntity = Permission.class,fetch = FetchType.EAGER)
+    @JoinTable(name = "user_permissions",
+        joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<Permission> permissions;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return getPermissions().stream().map(
+                p->new SimpleGrantedAuthority(p.getCode())
+        ).collect(Collectors.toList());
     }
 
     @Override
