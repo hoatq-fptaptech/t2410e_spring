@@ -1,10 +1,13 @@
 package com.example.t2410e.controller;
 
 import com.example.t2410e.common.ResponseHandler;
+import com.example.t2410e.dto.auth.LoginReq;
+import com.example.t2410e.dto.auth.LoginResponse;
 import com.example.t2410e.dto.auth.RegisterReq;
 import com.example.t2410e.dto.common.ResponseDTO;
 import com.example.t2410e.enums.StatusCode;
 import com.example.t2410e.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +29,17 @@ public class AuthController {
                     authService.register(req),"Register successfully");
         }catch (Exception e){
             return ResponseHandler.error(StatusCode.BAD_REQUEST,e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDTO<LoginResponse>> login(
+            @Valid @RequestBody LoginReq req){
+        try{
+            return ResponseHandler.success(authService.login(req),
+                    "Login successfully" );
+        }catch (Exception e){
+            return ResponseHandler.error(StatusCode.UNAUTHORIZED,e.getMessage());
         }
     }
 }
