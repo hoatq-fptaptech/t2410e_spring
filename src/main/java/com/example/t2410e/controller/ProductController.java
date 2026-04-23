@@ -8,6 +8,7 @@ import com.example.t2410e.enums.StatusCode;
 import com.example.t2410e.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyAuthority('VIEW_PRODUCT')")
     public ResponseEntity<ResponseDTO<List<ProductResponse>>> search(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Double minPrice,

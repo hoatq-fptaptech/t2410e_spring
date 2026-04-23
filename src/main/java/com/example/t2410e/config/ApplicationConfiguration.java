@@ -59,31 +59,6 @@ public class ApplicationConfiguration {
         return configuration.getAuthenticationManager();
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http ) throws Exception{
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        authorizationManagerRequestMatcherRegistry ->
-                                authorizationManagerRequestMatcherRegistry
-                                        .requestMatchers("/api/v1/auth/**").permitAll()
-                                        .anyRequest().authenticated()
-                );
-        return http.build();
 
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration cfg = new CorsConfiguration();
-        cfg.addAllowedHeader("*"); // content-type: application/json ...
-        cfg.addAllowedMethod("*"); // "GET POST PUT..
-        cfg.addAllowedOrigin("*"); // http://abc.com
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/v1/**",cfg);
-//        source.registerCorsConfiguration("/api/v2/**",cfg);
-//        source.registerCorsConfiguration("/api/v3/**",cfg);
-        return source;
-    }
 
 }
